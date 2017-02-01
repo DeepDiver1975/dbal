@@ -15,7 +15,17 @@ timestampedNode('SLAVE') {
 		phpenv local 5.6
 		php --version
 
-		./tests/jenkins/run.sh
+		DOCKER_CONTAINER_ID=$(docker run -d deepdiver/docker-oracle-xe-11g)
+		DATABASEHOST=$(docker inspect --format="{{.NetworkSettings.IPAddress}}" "$DOCKER_CONTAINER_ID")
+
+		sleep 5m
+
+		./test/jenkins/run.sh $DATABASEHOST
+
+		./vendor/bin/phpunit --configuration tests/jenkins/oracle.travis.xml --log-junit phpunit-results.xml
+
+		docker stop $DOCKER_CONTAINER_ID || true
+		docker kill $DOCKER_CONTAINER_ID || true
             '''
         }
 }
