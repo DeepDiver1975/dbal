@@ -20,7 +20,7 @@ timestampedNode('SLAVE') {
 
 		sleep 5m
 
-		./test/jenkins/run.sh $DATABASEHOST
+		./tests/jenkins/run.sh $DATABASEHOST
 
 		./vendor/bin/phpunit --configuration tests/jenkins/oracle.travis.xml --log-junit phpunit-results.xml
 
